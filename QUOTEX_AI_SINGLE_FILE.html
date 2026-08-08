@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QUOTEX AI</title>
+<style>
+body{margin:0;background:#0b1020;color:#fff;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
+main{max-width:520px;margin:auto;padding:18px}.card{background:#121a30;border:1px solid #263252;border-radius:20px;padding:18px;margin:12px 0}
+h1{margin:0}.muted{color:#9aa7c4}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-size:12px;color:#9aa7c4;margin-bottom:6px}
+select,button{width:100%;height:48px;border-radius:13px;border:1px solid #344263;background:#18213b;color:#fff;font-size:16px}
+button{margin-top:12px;background:#6256e8;border:0;font-weight:800}
+.signal{text-align:center;font-size:42px;font-weight:900;margin:18px 0}.buy{color:#43e0a0}.sell{color:#ff7085}.wait{color:#ffd166}
+.score{text-align:center;font-size:18px}.bar{height:9px;background:#263252;border-radius:20px;margin-top:10px}.fill{height:100%;width:0;background:#6256e8;border-radius:20px}
+.item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #263252}.item:last-child{border:0}
+.status{text-align:center;color:#9aa7c4;font-size:13px;margin-top:10px}
+</style></head>
+<body><main>
+<div class="card"><h1>QUOTEX AI</h1><div class="muted">Signal Dashboard</div></div>
+<div class="card"><div class="grid">
+<div><label>ASSET</label><select id="asset"><option>EUR/GBP</option><option>EUR/USD</option><option>GBP/USD</option></select></div>
+<div><label>TIMEFRAME</label><select id="tf"><option>5 MIN</option><option>1 MIN</option><option>15 MIN</option></select></div>
+</div><button onclick="analyze()">ANALYZE</button><div id="status" class="status">Ready</div></div>
+<div class="card"><div id="signal" class="signal wait">NO TRADE</div><div class="score">Score <b id="score">--</b>/100</div><div class="bar"><div id="fill" class="fill"></div></div><div id="stamp" class="status">--</div></div>
+<div class="card">
+<div class="item"><span>RSI</span><b id="rsi">--</b></div>
+<div class="item"><span>MACD</span><b id="macd">--</b></div>
+<div class="item"><span>EMA Trend</span><b id="ema">--</b></div>
+<div class="item"><span>Momentum</span><b id="mom">--</b></div>
+<div class="item"><span>Volatility</span><b id="vol">--</b></div>
+</div>
+<div class="card"><b>Recent signal</b><div id="history" class="status">None</div></div>
+<script>
+function r(a){return a[Math.floor(Math.random()*a.length)]}
+function analyze(){
+ document.getElementById('status').textContent='Analyzing...';
+ setTimeout(()=>{
+  let score=Math.floor(50+Math.random()*48),s=score>=80?r(['BUY','SELL']):'NO TRADE';
+  let e=document.getElementById('signal');e.textContent=s;e.className='signal '+(s==='BUY'?'buy':s==='SELL'?'sell':'wait');
+  document.getElementById('score').textContent=score;document.getElementById('fill').style.width=score+'%';
+  document.getElementById('rsi').textContent=r(['BUY','SELL','NEUTRAL']);
+  document.getElementById('macd').textContent=r(['BUY','SELL','NEUTRAL']);
+  document.getElementById('ema').textContent=r(['UP','DOWN','FLAT']);
+  document.getElementById('mom').textContent=r(['STRONG','WEAK','NEUTRAL']);
+  document.getElementById('vol').textContent=r(['NORMAL','HIGH','LOW']);
+  let t=new Date().toLocaleTimeString();document.getElementById('stamp').textContent=t;
+  document.getElementById('history').textContent=s+' · '+score+'/100 · '+t;
+  document.getElementById('status').textContent='Prototype — live market data not connected.';
+ },400)
+}
+</script></main></body></html>
